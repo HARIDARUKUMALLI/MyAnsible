@@ -1,0 +1,20 @@
+---
+- hosts: all
+  become: yes
+  tasks:
+    - name: To install java
+      apt:
+        name: openjdk-8-jre-headless
+        state: present
+    - name: To download tomcat package
+      get_url:
+        url: https://www-eu.apache.org/dist/tomcat/tomcat-8/v8.5.50/bin/apache-tomcat-8.5.50.tar.gz
+        dest: /usr/local
+        mode: 0440
+    - name: To extract the tar file
+      unarchive:
+        src: /usr/local/apache-tomcat-8.5.50.tar.gz
+        dest: /usr/local
+        remote_src: yes
+    - name: to start up the tomcat service
+      shell: nohup /usr/local/apache-tomcat-8.5.50/bin/startup.sh &
